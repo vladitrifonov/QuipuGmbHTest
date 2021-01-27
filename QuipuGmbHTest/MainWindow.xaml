@@ -1,0 +1,84 @@
+﻿<Window x:Class="QuipuGmbHTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:QuipuGmbHTest"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    
+    <Window.Resources>
+        
+        <DataTemplate x:Key="item">
+            <Border x:Name="border" CornerRadius="6" BorderBrush="Gray" Background="LightGray" BorderThickness="2" DockPanel.Dock="Top">
+                <StackPanel Name="Stack" Margin="5" Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Margin" Value="10" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <TextBlock FontSize="16" Name="url" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                          <Run Text="Url = "/>
+                          <Run Text="{Binding Name, Mode=OneWay}"/>
+                          <Run Text="Count of tags = "/>
+                          <Run Text="{Binding CountOfTags, Mode=OneWay}"/>
+                    </TextBlock>                   
+                </StackPanel>
+            </Border>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding IsHighest }" Value="True">
+                    <Setter TargetName="border" Property="BorderBrush" Value="Red" />
+                    <Setter TargetName="border" Property="BorderThickness" Value="4" />
+                    <Setter TargetName="url" Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+
+        </DataTemplate>
+        
+        
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.6*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.2*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap">
+          <Run Text="The highest url is = "/>
+          <Run Text="{Binding HighestUrl.Name, Mode=OneWay}"/>
+          <Run Text="Count of tags = "/>
+          <Run Text="{Binding HighestUrl.CountOfTags, Mode=OneWay}"/>
+        </TextBlock>
+
+        <ScrollViewer Grid.Row="1" Grid.ColumnSpan="3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
+            <ListBox  ItemsSource="{Binding TagsCollection}" ItemTemplate="{StaticResource item}" >
+               
+            </ListBox>
+        </ScrollViewer>
+             
+        <Button Grid.Row="2" Grid.Column="1" Margin="7" Content="Choose file" Command="{Binding ChooseFile}" />
+        <Button Grid.Row="2" Grid.Column="0" Margin="7" Content="Start" Command="{Binding Start}" />
+        <Button Grid.Row="2" Grid.Column="2" Margin="7" Content="Stop" Command="{Binding Stop}" />
+
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Center" >
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Margin" Value="10" />
+                </Style>
+                <Style TargetType="{x:Type ProgressBar}">
+                    <Setter Property="Margin" Value="10" />
+                </Style>
+            </StackPanel.Resources>
+            <ProgressBar  Minimum="0" Maximum="100" Value="{Binding ProgressBarValue, UpdateSourceTrigger=PropertyChanged}" Height="25" />
+            <TextBlock Text="{Binding TextProgress}" HorizontalAlignment="Center"/>
+        </StackPanel>
+
+    </Grid>
+</Window>
